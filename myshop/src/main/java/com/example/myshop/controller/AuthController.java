@@ -1,6 +1,8 @@
 package com.example.myshop.controller;
 
-import com.example.myshop.dto.*;
+import com.example.myshop.dto.auth.LoginRequest;
+import com.example.myshop.dto.auth.LoginResponse;
+import com.example.myshop.dto.common.ApiResponse;
 import com.example.myshop.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

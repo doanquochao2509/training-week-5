@@ -1,4 +1,4 @@
-package com.example.myshop.dto;
+package com.example.myshop.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

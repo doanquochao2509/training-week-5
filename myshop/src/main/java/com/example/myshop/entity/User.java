@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class User extends BaseEntity {
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password")
@@ -23,10 +23,7 @@ public class User extends BaseEntity {
     @Column(name = "is_active")
     private Boolean active;
 
-    @Column(name = "is_deleted")
-    private Boolean deleted;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 }

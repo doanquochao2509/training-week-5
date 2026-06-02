@@ -1,12 +1,13 @@
 package com.example.myshop.service;
-import com.example.myshop.dto.LoginRequest;
-import com.example.myshop.dto.LoginResponse;
+import com.example.myshop.dto.auth.LoginRequest;
+import com.example.myshop.dto.auth.LoginResponse;
 import com.example.myshop.exception.UnauthorizedException;
 import com.example.myshop.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.
         AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.
         UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,10 @@ public class AuthService {
 
             throw new UnauthorizedException(
                     "Tên đăng nhập hoặc mật khẩu không đúng");
+        } catch (DisabledException ex) {
+
+            throw new UnauthorizedException(
+                    "Tài khoản đã bị khóa");
         }
 
         String token = jwtService.generateToken(request.getUsername());

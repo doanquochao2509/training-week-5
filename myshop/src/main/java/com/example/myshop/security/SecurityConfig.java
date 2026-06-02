@@ -25,6 +25,9 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+
     @Bean
     public AuthenticationManager
     authenticationManager(
@@ -46,11 +49,21 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
 
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                authenticationEntryPoint)
+                        .accessDeniedHandler(
+                                accessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(
-                                "/api/auth/**")
+                                "/api/auth/login")
                         .permitAll()
+
+                        .requestMatchers(
+                                "/api/users/**")
+                        .hasRole("ADMIN")
 
                         .anyRequest()
                         .authenticated()
