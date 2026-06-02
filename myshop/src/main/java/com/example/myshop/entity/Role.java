@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class Role extends BaseEntity {
 
-    @Column(name = "code")
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
     @Column(name = "name")

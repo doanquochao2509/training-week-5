@@ -34,7 +34,9 @@ public class JwtAuthenticationFilter
 
         String authHeader =
                 request.getHeader("Authorization");
+        System.out.println("=== JWT FILTER ===");
 
+        System.out.println("AUTH HEADER = " + authHeader);
         if (authHeader == null ||
                 !authHeader.startsWith("Bearer ")) {
 
@@ -59,17 +61,12 @@ public class JwtAuthenticationFilter
                         == null) {
 
             UserDetails userDetails =
-                    userDetailsService
-                            .loadUserByUsername(
-                                    username);
+                    userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isValid(
-                    token,
-                    username)) {
+            if (jwtService.isValid(token, username)) {
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
+                        new UsernamePasswordAuthenticationToken(userDetails,
                                 null,
                                 userDetails
                                         .getAuthorities());

@@ -29,6 +29,7 @@ public class CustomUserDetailsService
                 .builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
+                .disabled(!user.getActive())
                 .authorities(
                         "ROLE_"
                                 + user.getRole()
