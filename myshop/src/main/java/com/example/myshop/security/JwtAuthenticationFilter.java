@@ -70,7 +70,8 @@ public class JwtAuthenticationFilter
                                 null,
                                 userDetails
                                         .getAuthorities());
-
+                System.out.println("=== AUTHORITIES = "
+                        + userDetails.getAuthorities());
                 auth.setDetails(
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request));
