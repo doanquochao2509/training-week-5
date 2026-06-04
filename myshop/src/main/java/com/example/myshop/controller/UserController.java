@@ -4,9 +4,10 @@ import com.example.myshop.dto.common.ApiResponse;
 import com.example.myshop.dto.user.CreateUserRequest;
 import com.example.myshop.dto.user.ResetPasswordRequest;
 import com.example.myshop.dto.user.UserResponse;
-import com.example.myshop.service.UserService;
+import com.example.myshop.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -19,6 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<UserResponse> createUser(
             @RequestBody CreateUserRequest request) {
 
@@ -30,6 +32,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Page<UserResponse>> getUsers(
             @RequestParam(defaultValue = "0")
             int page,
@@ -45,6 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Object> disableUser(
             @PathVariable UUID id) {
 
@@ -58,6 +62,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/reset-password")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Object> resetPassword(
             @PathVariable UUID id,
             @RequestBody ResetPasswordRequest request) {
@@ -70,6 +75,18 @@ public class UserController {
                 .status(200)
                 .message("Đặt lại mật khẩu thành công")
                 .data(null)
+                .build();
+    }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<UserResponse> updateUser(
+            @PathVariable UUID id,
+            @RequestBody com.example.myshop.dto.user.UpdateUserRequest request) {
+
+        return ApiResponse.<UserResponse>builder()
+                .status(200)
+                .message("Cập nhật thông tin người dùng thành công")
+                .data(userService.updateUser(id, request))
                 .build();
     }
 }

@@ -21,6 +21,6 @@ public class Category extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_deleted")
-    private Boolean deleted;
+    @Column(name = "is_active")
+    private Boolean active;
 }

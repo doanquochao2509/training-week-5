@@ -1,4 +1,4 @@
-package com.example.myshop.service;
+package com.example.myshop.service.auth;
 import com.example.myshop.dto.auth.LoginRequest;
 import com.example.myshop.dto.auth.LoginResponse;
 import com.example.myshop.exception.UnauthorizedException;
