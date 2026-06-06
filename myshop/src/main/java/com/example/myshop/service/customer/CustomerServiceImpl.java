@@ -83,7 +83,9 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException("Số điện thoại không được để trống");
         }
         if (!PHONE_REGEX.matcher(phone.trim()).matches()) {
-            throw new BadRequestException("Số điện thoại không đúng định dạng Việt Nam");
+            throw new BadRequestException(
+                    "Số điện thoại không đúng định dạng. Ví dụ hợp lệ: 0987654321 hoặc 0371234567."
+            );
         }
 
         if (email == null || email.trim().isEmpty()) {
