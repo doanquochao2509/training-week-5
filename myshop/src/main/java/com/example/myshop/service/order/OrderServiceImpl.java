@@ -30,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final InvoiceReportService invoiceReportService;
 
     @Override
     public OrderResponse create(CreateOrderRequest request) {
@@ -81,7 +82,14 @@ public class OrderServiceImpl implements OrderService {
             details.add(detail);
         }
 
-        order.setTotalAmount(totalAmount);
+        double discountPercent = request.getDiscountPercent() != null ? request.getDiscountPercent() : 0.0;
+        discountPercent = Math.min(100.0, Math.max(0.0, discountPercent)); // giới hạn 0-100
+        double discountAmount = totalAmount * discountPercent / 100.0;
+        double finalAmount = totalAmount - discountAmount;
+
+        order.setDiscountPercent(discountPercent);
+        order.setDiscountAmount(discountAmount);
+        order.setTotalAmount(finalAmount);
         order.setOrderDetails(details);
 
         orderRepository.save(order);
@@ -156,11 +164,20 @@ public class OrderServiceImpl implements OrderService {
                 .customerName(order.getCustomer() != null ? order.getCustomer().getCustomerName() : "N/A")
                 .customerPhone(order.getCustomer() != null ? order.getCustomer().getPhone() : "N/A")
                 .totalAmount(order.getTotalAmount())
+                .discountPercent(order.getDiscountPercent())
+                .discountAmount(order.getDiscountAmount())
                 .status(order.getStatus())
                 .note(order.getNote())
                 .createdBy(order.getCreatedBy())
                 .createdDate(order.getCreatedDate())
                 .items(itemResponses)
                 .build();
+    }
+    @Override
+    public byte[] exportInvoicePdf(UUID id) throws Exception {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Đơn hàng không tồn tại"));
+        OrderResponse response = mapToResponse(order);
+        return invoiceReportService.exportInvoicePdf(response);
     }
 }

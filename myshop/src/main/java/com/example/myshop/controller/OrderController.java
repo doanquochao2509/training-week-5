@@ -6,6 +6,9 @@ import com.example.myshop.dto.order.OrderResponse;
 import com.example.myshop.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +63,17 @@ public class OrderController {
                 "Cập nhật trạng thái xử lý đơn hàng thành công",
                 orderService.changeStatus(id, status)
         );
+    }
+    @GetMapping("/{id}/invoice-pdf")
+    @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
+    public ResponseEntity<byte[]> exportInvoicePdf(@PathVariable UUID id) throws Exception {
+        byte[] pdf = orderService.exportInvoicePdf(id);
+        OrderResponse order = orderService.detail(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=invoice-" + order.getOrderCode() + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 }

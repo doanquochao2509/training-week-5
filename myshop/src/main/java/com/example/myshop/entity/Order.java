@@ -29,6 +29,12 @@ public class Order extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "discount_percent")
+    private Double discountPercent = 0.0;
+
+    @Column(name = "discount_amount")
+    private Double discountAmount = 0.0;
+
     @Column(name = "created_by")
     private String createdBy; // Lưu username hoặc danh tính người tạo đơn
 

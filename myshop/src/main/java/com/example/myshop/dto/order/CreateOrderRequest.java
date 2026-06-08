@@ -10,5 +10,6 @@ import java.util.UUID;
 public class CreateOrderRequest {
     private UUID customerId;
     private String note;
+    private Double discountPercent;
     private List<OrderDetailRequest> items;
 }

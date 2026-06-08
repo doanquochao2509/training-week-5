@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCustomerCode(request.getCustomerCode().trim());
         customer.setCustomerName(request.getCustomerName().trim());
         customer.setPhone(request.getPhone().trim());
-        customer.setEmail(request.getEmail().trim());
+        customer.setEmail(request.getEmail() != null ? request.getEmail().trim() : null);
         customer.setAddress(request.getAddress());
         customer.setActive(true);
 
@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setCustomerName(request.getCustomerName().trim());
         customer.setPhone(request.getPhone().trim());
-        customer.setEmail(request.getEmail().trim());
+        customer.setEmail(request.getEmail() != null ? request.getEmail().trim() : null);
         customer.setAddress(request.getAddress());
 
         customerRepository.save(customer);
@@ -88,11 +88,10 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
 
-        if (email == null || email.trim().isEmpty()) {
-            throw new BadRequestException("Email không được để trống");
-        }
-        if (!EMAIL_REGEX.matcher(email.trim()).matches()) {
-            throw new BadRequestException("Email không đúng định dạng (ví dụ: abc@domain.com)");
+        if (email != null && !email.trim().isEmpty()) {
+            if (!EMAIL_REGEX.matcher(email.trim()).matches()) {
+                throw new BadRequestException("Email không đúng định dạng (ví dụ: abc@domain.com)");
+            }
         }
     }
 

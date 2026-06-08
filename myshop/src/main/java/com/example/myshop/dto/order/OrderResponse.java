@@ -21,6 +21,8 @@ public class OrderResponse {
     private String customerName;
     private String customerPhone;
     private Double totalAmount;
+    private Double discountPercent;
+    private Double discountAmount;
     private String status;
     private String note;
     private String createdBy;

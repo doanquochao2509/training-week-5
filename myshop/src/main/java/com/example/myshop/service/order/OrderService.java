@@ -10,4 +10,5 @@ public interface OrderService {
     OrderResponse detail(UUID id);
     Page<OrderResponse> search(String keyword, String status, int page, int size);
     OrderResponse changeStatus(UUID id, String status);
+    byte[] exportInvoicePdf(UUID id) throws Exception;
 }
