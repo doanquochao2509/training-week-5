@@ -23,4 +23,5 @@ public interface ProductRepository
     Page<Product> search(
             @Param("keyword") String keyword,
             Pageable pageable);
+    Long countByStockQuantityLessThanEqualAndActiveTrue(Long threshold);
 }

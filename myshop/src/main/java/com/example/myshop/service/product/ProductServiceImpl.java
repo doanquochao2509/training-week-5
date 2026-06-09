@@ -7,10 +7,13 @@ import com.example.myshop.exception.BadRequestException;
 import com.example.myshop.exception.ResourceNotFoundException;
 import com.example.myshop.repository.CategoryRepository;
 import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.storage.FileStorageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -22,6 +25,7 @@ public class ProductServiceImpl
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final FileStorageService fileStorageService;
 
     @Override
     public ProductResponse create(
@@ -154,6 +158,42 @@ public class ProductServiceImpl
                 .map(this::mapToResponse);
     }
 
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+    @Override
+    public ProductResponse uploadImage(UUID id, MultipartFile file) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sản phẩm không tồn tại"));
+
+        // Xóa ảnh cũ nếu có
+        if (product.getImageUrl() != null) {
+            String oldFileName = product.getImageUrl()
+                    .replace(baseUrl + "/uploads/", "");
+            fileStorageService.deleteFile(oldFileName);
+        }
+
+        String fileName = fileStorageService.storeFile(file);
+        product.setImageUrl(baseUrl + "/uploads/" + fileName);
+        productRepository.save(product);
+
+        return mapToResponse(product);
+    }
+
+    @Override
+    public void deleteImage(UUID id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sản phẩm không tồn tại"));
+
+        if (product.getImageUrl() != null) {
+            String oldFileName = product.getImageUrl()
+                    .replace(baseUrl + "/uploads/", "");
+            fileStorageService.deleteFile(oldFileName);
+            product.setImageUrl(null);
+            productRepository.save(product);
+        }
+    }
+
     private ProductResponse mapToResponse(
             Product product) {
 
@@ -162,6 +202,7 @@ public class ProductServiceImpl
                 .code(product.getCode())
                 .name(product.getName())
                 .description(product.getDescription())
+                .imageUrl(product.getImageUrl())
                 .price(product.getPrice())
                 .stockQuantity(product.getStockQuantity())
                 .active(product.getActive())

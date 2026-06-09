@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="revenue" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <property name="net.sf.jasperreports.default.font.name" value="DejaVu Sans"/>
+
+    <parameter name="period"       class="java.lang.String"/>
+    <parameter name="revenueTotal" class="java.lang.Double"/>
+    <parameter name="totalOrders"  class="java.lang.Long"/>
+    <parameter name="newCustomers" class="java.lang.Long"/>
+    <parameter name="exportDate"   class="java.lang.String"/>
+
+    <field name="sectionType"  class="java.lang.String"/>
+    <field name="productCode"  class="java.lang.String"/>
+    <field name="productName"  class="java.lang.String"/>
+    <field name="quantity"     class="java.lang.Long"/>
+    <field name="amount"       class="java.lang.Double"/>
+    <field name="categoryName" class="java.lang.String"/>
+    <field name="percent"      class="java.lang.Double"/>
+    <field name="chartLabel"   class="java.lang.String"/>
+    <field name="chartRevenue" class="java.lang.Double"/>
+
+    <title>
+        <band height="220">
+            <!-- Top red bar -->
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="6" forecolor="#DC3545" backcolor="#DC3545" mode="Opaque"/>
+            </rectangle>
+
+            <!-- Title -->
+            <staticText>
+                <reportElement x="0" y="16" width="555" height="32"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[BÁO CÁO DOANH THU]]></text>
+            </staticText>
+
+            <!-- Subtitle -->
+            <textField>
+                <reportElement x="0" y="50" width="555" height="18"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="9" isItalic="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Kỳ báo cáo: " + $P{period} + "   |   Xuất lúc: " + $P{exportDate}]]></textFieldExpression>
+            </textField>
+
+            <line><reportElement x="0" y="74" width="555" height="1" forecolor="#DDDDDD"/></line>
+
+            <!-- KPI Box 1: Doanh thu -->
+            <rectangle radius="4">
+                <reportElement x="0" y="84" width="175" height="68" backcolor="#EEF2FF" forecolor="#EEF2FF" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="0" y="90" width="175" height="14"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[TỔNG DOANH THU]]></text>
+            </staticText>
+            <textField pattern="#,##0 đ">
+                <reportElement x="0" y="108" width="175" height="26" forecolor="#4F46E5"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{revenueTotal}]]></textFieldExpression>
+            </textField>
+
+            <!-- KPI Box 2: Đơn hàng -->
+            <rectangle radius="4">
+                <reportElement x="190" y="84" width="175" height="68" backcolor="#F0FDF4" forecolor="#F0FDF4" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="190" y="90" width="175" height="14"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[TỔNG ĐƠN HÀNG]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="190" y="108" width="175" height="26" forecolor="#15803D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{totalOrders} + " đơn"]]></textFieldExpression>
+            </textField>
+
+            <!-- KPI Box 3: Khách hàng -->
+            <rectangle radius="4">
+                <reportElement x="380" y="84" width="175" height="68" backcolor="#FFF7ED" forecolor="#FFF7ED" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="380" y="90" width="175" height="14"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[KHÁCH HÀNG MỚI]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="380" y="108" width="175" height="26" forecolor="#C2410C"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["+" + $P{newCustomers}]]></textFieldExpression>
+            </textField>
+
+            <!-- Section: Top sản phẩm -->
+            <rectangle>
+                <reportElement x="0" y="166" width="555" height="22" backcolor="#1E293B" forecolor="#1E293B" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="166" width="200" height="22" forecolor="#FFFFFF"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[TOP SẢN PHẨM BÁN CHẠY]]></text>
+            </staticText>
+
+            <!-- Header bảng sản phẩm -->
+            <rectangle>
+                <reportElement x="0" y="188" width="555" height="20" backcolor="#F8FAFC" forecolor="#F8FAFC" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="190" width="70" height="16"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[MÃ HÀNG]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="78" y="190" width="220" height="16"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[TÊN SẢN PHẨM]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="298" y="190" width="60" height="16"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[SỐ LƯỢNG]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="358" y="190" width="140" height="16"/>
+                <textElement textAlignment="Right">
+                    <font fontName="DejaVu Sans" size="7" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[DOANH THU]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <detail>
+        <band height="26">
+
+            <!-- ========== PRODUCT ROW ========== -->
+            <line>
+                <reportElement x="0" y="25" width="555" height="1" forecolor="#F1F5F9">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("PRODUCT")]]></printWhenExpression>
+                </reportElement>
+            </line>
+            <textField isBlankWhenNull="true">
+                <reportElement x="8" y="4" width="70" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("PRODUCT")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{productCode}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="78" y="4" width="220" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("PRODUCT")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="298" y="4" width="60" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("PRODUCT")]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 đ" isBlankWhenNull="true">
+                <reportElement x="358" y="4" width="140" height="18" forecolor="#DC3545">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("PRODUCT")]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+            </textField>
+
+            <!-- ========== SECTION HEADER: CATEGORY ========== -->
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="22" backcolor="#1E293B" forecolor="#1E293B" mode="Opaque">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY_HEADER")]]></printWhenExpression>
+                </reportElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="2" width="300" height="18" forecolor="#FFFFFF">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY_HEADER")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[TỶ TRỌNG THEO DANH MỤC]]></text>
+            </staticText>
+
+            <!-- ========== CATEGORY ROW ========== -->
+            <line>
+                <reportElement x="0" y="25" width="555" height="1" forecolor="#F1F5F9">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY")]]></printWhenExpression>
+                </reportElement>
+            </line>
+            <textField isBlankWhenNull="true">
+                <reportElement x="8" y="4" width="280" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{categoryName}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 đ" isBlankWhenNull="true">
+                <reportElement x="288" y="4" width="160" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY")]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="448" y="4" width="100" height="18" forecolor="#6366F1">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CATEGORY")]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{percent} + "%"]]></textFieldExpression>
+            </textField>
+
+            <!-- ========== SECTION HEADER: CHART ========== -->
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="22" backcolor="#1E293B" forecolor="#1E293B" mode="Opaque">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CHART_HEADER")]]></printWhenExpression>
+                </reportElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="8" y="2" width="300" height="18" forecolor="#FFFFFF">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CHART_HEADER")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[DOANH THU THEO KỲ]]></text>
+            </staticText>
+
+            <!-- ========== CHART ROW ========== -->
+            <line>
+                <reportElement x="0" y="25" width="555" height="1" forecolor="#F1F5F9">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CHART")]]></printWhenExpression>
+                </reportElement>
+            </line>
+            <textField isBlankWhenNull="true">
+                <reportElement x="8" y="4" width="80" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CHART")]]></printWhenExpression>
+                </reportElement>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{chartLabel}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0 đ" isBlankWhenNull="true">
+                <reportElement x="88" y="4" width="200" height="18">
+                    <printWhenExpression><![CDATA[$F{sectionType}.equals("CHART")]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="8" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{chartRevenue}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="40">
+            <line><reportElement x="0" y="10" width="555" height="1" forecolor="#DDDDDD"/></line>
+            <staticText>
+                <reportElement x="0" y="16" width="555" height="14"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans" size="8" isItalic="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+                </textElement>
+<!--                <text><![CDATA[Báo cáo được tạo tự động bởi hệ thống SMS — Không có giá trị pháp lý]]></text>-->
+            </staticText>
+            <rectangle>
+                <reportElement x="0" y="34" width="555" height="6" forecolor="#DC3545" backcolor="#DC3545" mode="Opaque"/>
+            </rectangle>
+        </band>
+    </summary>
+
+</jasperReport>

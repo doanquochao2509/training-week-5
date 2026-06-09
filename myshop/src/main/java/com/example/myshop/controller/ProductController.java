@@ -4,11 +4,13 @@ import com.example.myshop.dto.common.ApiResponse;
 import com.example.myshop.dto.product.CreateProductRequest;
 import com.example.myshop.dto.product.ProductResponse;
 import com.example.myshop.dto.product.UpdateProductRequest;
+import com.example.myshop.exception.BadRequestException;
 import com.example.myshop.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -89,5 +91,32 @@ public class ProductController {
         return ApiResponse.success(
                 "Cập nhật trạng thái thành công",
                 null);
+    }
+
+    @PostMapping("/{id}/image")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ApiResponse<ProductResponse> uploadImage(
+            @PathVariable UUID id,
+            @RequestParam("file") MultipartFile file) {
+
+        // Validate
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new BadRequestException("Chỉ chấp nhận file ảnh");
+        }
+        if (file.getSize() > 5 * 1024 * 1024) {
+            throw new BadRequestException("File không được vượt quá 5MB");
+        }
+
+        return ApiResponse.success(
+                "Upload ảnh thành công",
+                productService.uploadImage(id, file));
+    }
+
+    @DeleteMapping("/{id}/image")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ApiResponse<Void> deleteImage(@PathVariable UUID id) {
+        productService.deleteImage(id);
+        return ApiResponse.success("Xóa ảnh thành công", null);
     }
 }

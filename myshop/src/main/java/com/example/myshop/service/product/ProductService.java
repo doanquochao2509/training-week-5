@@ -2,6 +2,7 @@ package com.example.myshop.service.product;
 
 import com.example.myshop.dto.product.*;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -25,4 +26,7 @@ public interface ProductService {
             String keyword,
             int page,
             int size);
+
+    ProductResponse uploadImage(UUID id, MultipartFile file);
+    void deleteImage(UUID id);
 }

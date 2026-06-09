@@ -13,6 +13,8 @@ public class UpdateProductRequest {
 
     private String description;
 
+    private String imageUrl;
+
     private Double price;
 
     private Integer stockQuantity;
